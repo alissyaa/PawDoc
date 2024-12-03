@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="styles.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <section>
+        <header>
+            <h2>
+                <a href="#" class="logo">
+                    <img src="assets/logo.png" alt="Logo" class="logo" />
+                </a>
+            </h2>
+            <nav class="navigation">
+                <a href="#">Beranda</a>
+                <a href="kucing.html">Konsultasi</a>
+                <a href="profil.html">Profil</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="info">
+                <img src="assets/kucing.png" alt="Gambar Kucing" class="kuzing">
+                <h2>Hi, paw parents!</h2>
+                <p>Dengan langkah sederhana, temukan potensi masalah kesehatan kucingmu<br><span>dan berikan perawatan
+                        terbaik untuknya.</span></p>
+                <a href="javascript:void(0);" class="info-btn">Mulai diagnosa</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Login</h2>
+            <form action="kucing.html"> <!-- method="POST" -->
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit" class="info-btn">Login</button>
+            </form>
+            <p class="signup-text">Belum punya akun? <a href="#" id="signupLink">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-signup-btn">&times;</span>
+            <h2>Sign Up</h2>
+            <form action="kucing.html"> <!-- method="POST" -->
+                <label for="signupEmail">Email:</label>
+                <input type="email" id="signupEmail" name="email" required>
+                <label for="signupPassword">Password:</label>
+                <input type="password" id="signupPassword" name="password" required>
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <button type="submit" class="info-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("loginModal");
+        const btn = document.querySelector(".info-btn");
+        const closeBtn = document.querySelector(".close-btn");
+
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            modal.style.display = "block";
+        });
+
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        const signupModal = document.getElementById("signupModal");
+        const signupLink = document.getElementById("signupLink");
+        const closeSignupBtn = document.querySelector(".close-signup-btn");
+
+        signupLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            modal.style.display = "none";
+            signupModal.style.display = "block";
+        });
+
+        closeSignupBtn.addEventListener("click", () => {
+            signupModal.style.display = "none";
+        });
+
+        window.addEventListener("click", (e) => {
+            if (e.target === signupModal) {
+                signupModal.style.display = "none";
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
