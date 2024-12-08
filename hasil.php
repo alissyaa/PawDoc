@@ -23,18 +23,16 @@
             <a href="profil.html">Profil</a>
         </nav>
     </header>
+    <?php
+        session_start();
+        if (isset($_SESSION['hasil'])) {
+            echo $_SESSION['hasil'];
+            unset($_SESSION['hasil']);
+        } else {
+            echo "<h2 style='text-align:center;'>Tidak ada hasil yang tersedia.</h2>";
+        }
+    ?>
 
-    <div class="form-container">
-        <h2>Tunggu dulu, kami ingin tahu tentang kucingmu!</h2>
-        <form action="konsultasi.html"> <!-- method="post" -->
-            <label for="name">Nama kucing:</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="date">Tanggal konsultasi:</label>
-            <input type="date" id="date" name="date" required>
-            
-            <button type="submit" class="info-btn">Submit</button>
-        </form>
-    </div>
+
 </body>
 </html>
