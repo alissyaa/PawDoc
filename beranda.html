@@ -43,7 +43,7 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2>Login</h2>
-            <form action="kucing.html"> <!-- method="POST" -->
+            <form action="php/loginsignup.php" method="POST">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
                 <label for="password">Password:</label>
@@ -58,7 +58,7 @@
         <div class="modal-content">
             <span class="close-signup-btn">&times;</span>
             <h2>Sign Up</h2>
-            <form action="kucing.html"> <!-- method="POST" -->
+            <form action="php/loginsignup.php" method="POST">
                 <label for="signupEmail">Email:</label>
                 <input type="email" id="signupEmail" name="email" required>
                 <label for="signupPassword">Password:</label>
@@ -109,6 +109,17 @@
                 signupModal.style.display = "none";
             }
         });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('show_modal') && urlParams.get('show_modal') === 'true') {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        const modalnew = document.getElementById('signupmodal');
+    const closeModal = document.querySelector('.close');
+    closeModal.onclick = function() {
+        modalnew.style.display = 'none';
+    }
 
     </script>
 

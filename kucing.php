@@ -24,6 +24,17 @@
         </nav>
     </header>
 
-
+    <div class="form-container">
+        <h2>Tunggu dulu, kami ingin tahu tentang kucingmu!</h2>
+        <form action="kucing.php" method="POST">
+            <label for="name">Nama kucing:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="date">Tanggal konsultasi:</label>
+            <input type="date" id="date" name="date" required>
+            
+            <button type="submit" class="info-btn">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
