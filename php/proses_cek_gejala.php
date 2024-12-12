@@ -10,63 +10,90 @@ if (empty($gejalaInput)) {
     exit();
 }
 
-$gejalaQuery = "SELECT * FROM gejala WHERE kode_gejala IN ('" . implode("','", $gejalaInput) . "')";
-$gejalaResult = $conn->query($gejalaQuery);
+$query = "SELECT * FROM data";
+$hasil = $conn->query($query);
 
-$gejalaTerpilih = [];
-while ($row = $gejalaResult->fetch_assoc()) {
-    $gejalaTerpilih[$row['kode_gejala']] = [
-        'gejala' => $row['gejala'],
-        'bobot' => $row['bobot']
-    ];
+$data = [];
+while ($baris = $hasil->fetch_assoc()) {
+    $data[] = $baris;
 }
 
-$penyakitQuery = "SELECT p.kode_penyakit, p.nama_penyakit, p.solusi, pg.kode_gejala, g.bobot 
-                  FROM penyakit p 
-                  JOIN penyakit_gejala pg ON p.kode_penyakit = pg.kode_penyakit 
-                  JOIN gejala g ON pg.kode_gejala = g.kode_gejala";
-$penyakitResult = $conn->query($penyakitQuery);
+$gejala = array_slice(array_keys($data[0]), 0, -1);
 
-$penyakitData = [];
-while ($row = $penyakitResult->fetch_assoc()) {
-    $penyakitData[$row['kode_penyakit']]['nama_penyakit'] = $row['nama_penyakit'];
-    $penyakitData[$row['kode_penyakit']]['solusi'] = $row['solusi'];
-    $penyakitData[$row['kode_penyakit']]['gejala'][$row['kode_gejala']] = $row['bobot'];
-}
-
-$penyakitJarak = [];
-
-foreach ($penyakitData as $kodePenyakit => $dataPenyakit) {
-    $nilaiSementara = 0;
-    $totalBobotGejala = array_sum($dataPenyakit['gejala']);
-    
-    foreach ($dataPenyakit['gejala'] as $kodeGejala => $bobot) {
-        if (isset($gejalaTerpilih[$kodeGejala])) {
-            $nilaiSementara += $bobot * 1;
-        } else {
-            $nilaiSementara += $bobot * 0.1;
+function konversi_gejala($data, $gejala) {
+    foreach ($data as &$baris) {
+        foreach ($gejala as $g) {
+            $baris[$g] = ($baris[$g] === "Yes") ? 1 : 0;
         }
     }
-    
-    $penyakitJarak[$kodePenyakit] = $nilaiSementara / $totalBobotGejala;
+    return $data;
 }
 
-asort($penyakitJarak);
+$data_terkonversi = konversi_gejala($data, $gejala);
 
-$K = 3;
-$hasilPenyakit = array_slice($penyakitJarak, 0, $K, true);
-
-if (empty($hasilPenyakit)) {
-    $_SESSION['hasil'] = "Anda Sehat";
-} else {
-    $hasilOutput = "";
-    foreach ($hasilPenyakit as $kodePenyakit => $nilai) {
-        $hasilOutput .= "<h3>" . $penyakitData[$kodePenyakit]['nama_penyakit'] . "</h3>";
-        $hasilOutput .= "<p>Solusi: " . $penyakitData[$kodePenyakit]['solusi'] . "</p><br>";
+// Fungsi untuk menghitung jarak Euclidean
+function jarak_euclidean($a, $b) {
+    $jumlah = 0;
+    foreach ($a as $key => $value) {
+        $jumlah += pow($value - $b[$key], 2);
     }
-    $_SESSION['hasil'] = $hasilOutput;
+    return sqrt($jumlah);
 }
 
+// Fungsi KNN
+function prediksi_knn($data_latih, $data_uji, $k) {
+    $jarak = [];
+    foreach ($data_latih as $latih) {
+        $dist = jarak_euclidean($latih['fitur'], $data_uji);
+        $jarak[] = ['jarak' => $dist, 'label' => $latih['label']];
+    }
+
+    usort($jarak, function($a, $b) {
+        return $a['jarak'] <=> $b['jarak'];
+    });
+
+    $tetangga = array_slice($jarak, 0, $k);
+    $suara = [];
+    foreach ($tetangga as $t) {
+        if (!isset($suara[$t['label']])) {
+            $suara[$t['label']] = 0;
+        }
+        $suara[$t['label']] += 1;
+    }
+    arsort($suara);
+    return array_key_first($suara);
+}
+
+// Siapkan data latih
+$data_latih = [];
+foreach ($data_terkonversi as $baris) {
+    $fitur = [];
+    foreach ($gejala as $g) {
+        $fitur[$g] = $baris[$g];
+    }
+    $data_latih[] = ['fitur' => $fitur, 'label' => $baris['penyakit']];
+}
+
+// input pengguna dari form 
+$data_pengguna = [];
+foreach ($gejala as $g) {
+    $data_pengguna[$g] = in_array($g, $_POST['gejala']) ? 1 : 0;
+}
+
+// Prediksi penyakit menggunakan KNN
+$prediksi = prediksi_knn($data_latih, $data_pengguna, 11);
+
+$id_konsultasi = $_SESSION['id_konsultasi']; 
+
+$sql_update = "UPDATE konsultasi SET riwayat_penyakit = ? WHERE id_konsultasi = ?";
+if ($stmt = $conn->prepare($sql_update)) {
+    $stmt->bind_param("si", $prediksi, $id_konsultasi); 
+    if ($stmt->execute()) {
+        header("Location: ../hasil.php");
+    } else {
+        echo "Gagal memperbarui penyakit.";
+    }
+}
 header("Location: ../hasil.php");
 exit();
 

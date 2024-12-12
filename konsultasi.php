@@ -1,16 +1,17 @@
 <?php
-include('php/conn.php');
+session_start();
 
-$sql = "SELECT kode_gejala, gejala FROM gejala";
+include('php/conn.php');
+$sql = "SHOW COLUMNS FROM data";
 $result = $conn->query($sql);
 
 $gejalaList = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $gejalaList[] = $row;
+        $gejalaList[] = $row['Field'];
     }
 }
-
+array_pop($gejalaList);
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +36,7 @@ if ($result->num_rows > 0) {
         <nav class="navigation">
             <a href="beranda.html">Beranda</a>
             <a href="#">Konsultasi</a>
-            <a href="profil.html">Profil</a>
+            <a href="profil.php">Profil</a>
         </nav>
     </header>
 
@@ -47,8 +48,8 @@ if ($result->num_rows > 0) {
                 <div class="checkbox-group">
                     <?php foreach ($gejalaList as $gejala): ?>
                         <label>
-                            <input type="checkbox" name="gejala[]" value="<?php echo htmlspecialchars($gejala['kode_gejala']); ?>">
-                            <?php echo htmlspecialchars($gejala['gejala']); ?>
+                            <input type="checkbox" name="gejala[]" value="<?php echo htmlspecialchars($gejala); ?>">
+                            <?php echo htmlspecialchars($gejala); ?>
                         </label><br>
                     <?php endforeach; ?>
                 </div>

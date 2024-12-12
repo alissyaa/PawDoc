@@ -20,27 +20,33 @@
         <nav class="navigation">
             <a href="beranda.html">Beranda</a>
             <a href="kucing.php">Konsultasi</a>
-            <a href="profil.php">Profil</a>
+            <a href="#">Profil</a>
         </nav>
     </header>
     <?php
         session_start();
         include('php/conn.php');
-        $id_konsultasi = $_SESSION['id_konsultasi'];
+        $id_user = $_SESSION['id_user'];
 
-        $sql = "SELECT riwayat_penyakit,nama_kucing FROM konsultasi WHERE id_konsultasi = ?";
+        $sql = "SELECT riwayat_penyakit, nama_kucing, tanggal_konsultasi FROM konsultasi WHERE id_user = ?";
+
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("i", $id_konsultasi);
+            $stmt->bind_param("i", $id_user); 
             $stmt->execute();
-            $stmt->bind_result($penyakit,$nama_kucing);
-            $stmt->fetch();
+            $stmt->bind_result($penyakit, $nama_kucing, $tanggal_konsultasi);
 
-            if ($penyakit) {
-                echo "<h2 style='text-align:center;'>Penyakit yang diprediksi: " . htmlspecialchars($penyakit)."</h2>";
-                echo "<h2 style='text-align:center;'>Segera bawa ".htmlspecialchars($nama_kucing)." ke dokter hewan!</h2>";
+            if ($stmt->fetch()) {
+                echo "<h2 style='text-align:center;'>Riwayat Konsultasi Kucing Anda:</h2>";
+                do {
+                    echo "<p>Nama Kucing: " . htmlspecialchars($nama_kucing) . "<br>";
+                    echo "Penyakit yang Diprediksi: " . htmlspecialchars($penyakit) . "<br>";
+                    echo "Tanggal Konsultasi: " . htmlspecialchars($tanggal_konsultasi) . "</p><hr>";
+                } while ($stmt->fetch());
             } else {
-                echo  htmlspecialchars($nama_kucing)."Anda Sehat";
+                echo "<h2 style='text-align:center;'>Tidak ada riwayat konsultasi.</h2>";
             }
+        } else {
+            echo "Terjadi kesalahan dalam pengambilan data.";
         }
         ?>
 

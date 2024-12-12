@@ -3,20 +3,21 @@ session_start();
 include('conn.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_user = $_SESSION['id_user'];
     $nama_kucing = $_POST['name'];
-    $tanggal_konsultasi = $_POST['date'];
 
-    $sql = "INSERT INTO konsultasi (nama_kucing, tanggal_konsultasi) VALUES (?, ?)";
+    $sql = "INSERT INTO konsultasi (id_user, nama_kucing) VALUES (?, ?)";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("ss", $nama_kucing, $tanggal_konsultasi);
+        $stmt->bind_param("is", $id_user, $nama_kucing);
         if ($stmt->execute()) {
-            echo "Data berhasil disimpan!";
+            $_SESSION['id_konsultasi'] = $stmt->insert_id;
+            header("Location: ../konsultasi.php");
         } else {
-            echo "Terjadi kesalahan: " . $stmt->error;
+            echo "Gagal menyimpan data konsultasi: " . $stmt->error;
         }
         $stmt->close();
     } else {
-        echo "Terjadi kesalahan: " . $conn->error;
+        echo "Gagal mempersiapkan statement: " . $conn->error;
     }
 }
 ?>
