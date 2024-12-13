@@ -19,14 +19,14 @@
         </h2>
         <nav class="navigation">
             <a href="beranda.html">Beranda</a>
-            <a href="kucing.html">Konsultasi</a>
-            <a href="profil.html">Profil</a>
+            <a href="kucing.php">Konsultasi</a>
+            <a href="profil.php">Profil</a>
         </nav>
     </header>
 
     <div class="form-container">
         <h2>Tunggu dulu, kami ingin tahu tentang kucingmu!</h2>
-        <form action="kucing.php" method="POST">
+        <form action="php/kucing.php" method="POST">
             <label for="name">Nama kucing:</label>
             <input type="text" id="name" name="name" required>
             
