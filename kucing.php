@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagnosa</title>
-    <link rel="stylesheet" href="style.css">
     <link href="styles.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +19,7 @@
         <nav class="navigation">
             <a href="beranda.html">Beranda</a>
             <a href="kucing.php">Konsultasi</a>
-            <a href="profil.php">Profil</a>
+            <a href="riwayat.php">Riwayat</a>
         </nav>
     </header>
 
@@ -29,10 +28,6 @@
         <form action="php/kucing.php" method="POST">
             <label for="name">Nama kucing:</label>
             <input type="text" id="name" name="name" required>
-            
-            <label for="date">Tanggal konsultasi:</label>
-            <input type="date" id="date" name="date" required>
-            
             <button type="submit" class="info-btn">Submit</button>
         </form>
     </div>

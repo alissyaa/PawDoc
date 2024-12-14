@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagnosa</title>
-    <link rel="stylesheet" href="style.css">
     <link href="styles.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +19,7 @@
         <nav class="navigation">
             <a href="beranda.html">Beranda</a>
             <a href="kucing.php">Konsultasi</a>
-            <a href="#">Profil</a>
+            <a href="#">Riwayat</a>
         </nav>
     </header>
     <?php

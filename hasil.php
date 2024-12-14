@@ -39,7 +39,7 @@
                 echo "<h2 style='text-align:center;'>Penyakit yang diprediksi: " . htmlspecialchars($penyakit)."</h2>";
                 echo "<h2 style='text-align:center;'>Segera bawa ".htmlspecialchars($nama_kucing)." ke dokter hewan!</h2>";
             } else {
-                echo  htmlspecialchars($nama_kucing)."Anda Sehat";
+                echo  htmlspecialchars($nama_kucing)." Sehat!";
             }
         }
         ?>

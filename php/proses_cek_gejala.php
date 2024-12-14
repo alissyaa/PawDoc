@@ -6,7 +6,7 @@ $gejalaInput = isset($_POST['gejala']) ? $_POST['gejala'] : [];
 
 if (empty($gejalaInput)) {
     $_SESSION['hasil'] = "Anda Sehat";
-    header("Location: ../hasil.php");
+    header("Location: ../coba.php");
     exit();
 }
 
@@ -89,12 +89,12 @@ $sql_update = "UPDATE konsultasi SET riwayat_penyakit = ? WHERE id_konsultasi = 
 if ($stmt = $conn->prepare($sql_update)) {
     $stmt->bind_param("si", $prediksi, $id_konsultasi); 
     if ($stmt->execute()) {
-        header("Location: ../hasil.php");
+        header("Location: ../coba.php");
     } else {
         echo "Gagal memperbarui penyakit.";
     }
 }
-header("Location: ../hasil.php");
+header("Location: ../coba.php");
 exit();
 
 ?>
