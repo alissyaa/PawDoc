@@ -1,0 +1,93 @@
+body {
+    font-family: 'Roboto Mono', monospace;
+    margin: 20px;
+    padding: 90px 20px 0 20px;
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 0 15px;
+    z-index: 10;
+}
+
+.logo img {
+    max-height: 50px;
+    width: auto;
+}
+
+.navigation {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.navigation a {
+    color: #000000;
+    text-decoration: none;
+    padding: 2px 15px;
+    transition: 0.3s background;
+    font-size: 14px;
+    margin: 0 10px;
+}
+
+.navigation a:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+.card {
+    position: relative;
+    background: white;
+    padding: 25px;
+    width: 555px;
+    box-shadow: 10px 10px 0px black;
+    border: 2px solid black;
+    margin: 15px 0;
+}
+
+.date {
+    font-size: 12px;
+    color: gray;
+    margin: 0 0 10px;
+}
+
+.title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: black;
+    margin: 5px 0 15px;
+}
+
+.detail-button {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    text-transform: lowercase;
+    transform: translateY(-50%);
+}
+
+.detail-button:hover {
+    opacity: 0.8;
+}
