@@ -81,20 +81,22 @@ foreach ($gejala as $g) {
 }
 
 // Prediksi penyakit menggunakan KNN
-$prediksi = prediksi_knn($data_latih, $data_pengguna, 11);
+$prediksi = prediksi_knn($data_latih, $data_pengguna, 3);
 
 $id_konsultasi = $_SESSION['id_konsultasi']; 
 
-$sql_update = "UPDATE konsultasi SET riwayat_penyakit = ? WHERE id_konsultasi = ?";
+$gejalaJson = json_encode($gejalaInput);
+
+$sql_update = "UPDATE konsultasi SET riwayat_penyakit = ?, gejala = ? WHERE id_konsultasi = ?";
 if ($stmt = $conn->prepare($sql_update)) {
-    $stmt->bind_param("si", $prediksi, $id_konsultasi); 
+    $stmt->bind_param("ssi", $prediksi, $gejalaJson, $id_konsultasi); 
     if ($stmt->execute()) {
         header("Location: ../coba.php");
     } else {
         echo "Gagal memperbarui penyakit.";
     }
 }
-header("Location: ../coba.php");
+header("Location: ../hasil.php");
 exit();
 
 ?>

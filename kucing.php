@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['id_user'])) {
+    echo "<script>alert('Anda belum login!'); window.location.href = 'beranda.php';</script>";
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -17,7 +24,7 @@
             </a>
         </h2>
         <nav class="navigation">
-            <a href="beranda.html">Beranda</a>
+            <a href="beranda.php">Beranda</a>
             <a href="kucing.php">Konsultasi</a>
             <a href="riwayat.php">Riwayat</a>
         </nav>

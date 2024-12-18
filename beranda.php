@@ -1,3 +1,8 @@
+<?php
+session_start();
+$isLoggedIn = isset($_SESSION['id_user']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +37,8 @@
                 <h2>Hi, paw parents!</h2>
                 <p>Dengan langkah sederhana, temukan potensi masalah kesehatan kucingmu<br><span>dan berikan perawatan
                         terbaik untuknya.</span></p>
-                <a href="javascript:void(0);" class="info-btn">Mulai diagnosa</a>
+                <a href="<?= $isLoggedIn ? 'kucing.php' : 'javascript:void(0);' ?>" 
+                        class="info-btn" data-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">Mulai diagnosa</a>
             </div>
         </div>
 
@@ -74,8 +80,11 @@
         const closeBtn = document.querySelector(".close-btn");
 
         btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            modal.style.display = "block";
+            const isLoggedIn = btn.getAttribute("data-logged-in") === "true";
+            if (!isLoggedIn) {
+                e.preventDefault();
+                modal.style.display = "block"; 
+            }
         });
 
         closeBtn.addEventListener("click", () => {
