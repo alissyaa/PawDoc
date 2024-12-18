@@ -1,7 +1,11 @@
 <?php
 session_start();
 include('php/conn.php');
-$id_konsultasi = $_SESSION['id_konsultasi'];
+if (isset($_SESSION['id_konsultasi'])) {
+  $id_konsultasi = $_SESSION['id_konsultasi'];
+} else {
+  $id_konsultasi = $_GET['id_konsultasi'];
+}
 
 // Inisialisasi variabel kosong
 $nama_kucing = "";
@@ -9,19 +13,24 @@ $penyakit = "";
 $keterangan = "";
 
 // Ambil data dari database
-$sql = "SELECT riwayat_penyakit, nama_kucing, tanggal_konsultasi FROM konsultasi WHERE id_konsultasi = ?";
+$sql = "SELECT riwayat_penyakit, nama_kucing, tanggal_konsultasi,gejala FROM konsultasi WHERE id_konsultasi = ?";
 if ($stmt = $conn->prepare($sql)) {
   $stmt->bind_param("i", $id_konsultasi);
   $stmt->execute();
-  $stmt->bind_result($penyakit, $nama_kucing, $tanggal_konsultasi);
+  $stmt->bind_result($penyakit, $nama_kucing, $tanggal_konsultasi, $gejala_json);
   $stmt->fetch();
+
+  $gejala_list = json_decode($gejala_json, true);
+  $gejala_text = $gejala_list ? implode(", ", $gejala_list) : "tidak ada gejala";
 
   // Logika menentukan keterangan
   if ($penyakit) {
-    $keterangan = "Segera bawa " . htmlspecialchars($nama_kucing) . " ke dokter hewan untuk pemeriksaan lebih lanjut.";
+    $keterangan = "Berdasarkan hasil konsultasi, " . $nama_kucing . " terindikasi mengalami " . $penyakit . 
+                    " dengan gejala: $gejala_text. Kami merekomendasikan untuk segera membawa " . $nama_kucing . 
+                    " ke dokter hewan untuk pemeriksaan lebih lanjut.";
   } else {
     $penyakit = "Sehat";
-    $keterangan = htmlspecialchars($nama_kucing) . " dalam kondisi sehat. Tetap jaga kesehatannya!";
+    $keterangan = $nama_kucing . " dalam kondisi sehat. Tetap jaga kesehatannya!";
   }
 }
 ?>

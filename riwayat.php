@@ -54,7 +54,7 @@ if (!isset($_SESSION['id_user'])) {
                 echo "<p class='date'>" . $tanggal_konsultasi . "</p>";
                 echo "<h1 class='title'>" . $nama_kucing . "</h1>";
                 echo "<p class='subtitle'>" . $penyakit . "</p>";
-                echo "<a href='detail_riwayat.php?id_konsultasi=" . $id_konsultasi . "' class='detail-button'>Detail</a>";
+                echo "<a href='hasil.php?id_konsultasi=" . $id_konsultasi . "' class='detail-button'>Detail</a>";
                 echo "</div>";
             } while ($stmt->fetch());
         } else {
