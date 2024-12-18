@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2024 at 11:02 PM
+-- Generation Time: Dec 18, 2024 at 06:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -314,17 +314,18 @@ CREATE TABLE `konsultasi` (
   `id_user` int(11) NOT NULL,
   `nama_kucing` varchar(100) NOT NULL,
   `riwayat_penyakit` varchar(255) DEFAULT NULL,
-  `tanggal_konsultasi` date NOT NULL DEFAULT current_timestamp()
+  `tanggal_konsultasi` date NOT NULL DEFAULT current_timestamp(),
+  `gejala` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`gejala`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `konsultasi`
 --
 
-INSERT INTO `konsultasi` (`id_konsultasi`, `id_user`, `nama_kucing`, `riwayat_penyakit`, `tanggal_konsultasi`) VALUES
-(2, 1, 'apin', NULL, '2024-12-13'),
-(3, 1, 'apini', 'panleukopenia', '2024-12-13'),
-(4, 1, 'apin', 'scabies', '2024-12-13');
+INSERT INTO `konsultasi` (`id_konsultasi`, `id_user`, `nama_kucing`, `riwayat_penyakit`, `tanggal_konsultasi`, `gejala`) VALUES
+(9, 1, 'apinn', 'panleukopenia', '2024-12-18', '[\"lemah\",\"kurang respon\",\"batuk\",\"gatal\"]'),
+(10, 1, 'miaw', 'panleukopenia', '2024-12-18', '[\"demam\",\"batuk\"]'),
+(11, 1, 'swa', 'scabies', '2024-12-18', '[\"gatal\"]');
 
 -- --------------------------------------------------------
 
@@ -370,7 +371,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `konsultasi`
 --
 ALTER TABLE `konsultasi`
-  MODIFY `id_konsultasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_konsultasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
