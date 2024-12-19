@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_P
 
         if ($result->num_rows > 0) {
             echo "<script>alert('Email sudah terdaftar!')</script>";
-            header("Location: ../beranda.html");
+            header("Location: ../beranda.php");
             exit();
         }
 
@@ -35,10 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_P
         $stmt->bind_param("ss", $email, $hashedPassword);
 
         if ($stmt->execute()) {
-            header("Location: ../beranda.html");
+            header("Location: ../beranda.php");
             exit();
         } else {
-            header("Location: ../beranda.html");
+            header("Location: ../beranda.php");
             exit();
         }
     } else { // Proses Login
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_P
             exit();
         } else {
             echo "<script>alert('Email atau password salah!');
-            window.location.href = '../beranda.html?show_modal=true';
+            window.location.href = '../beranda.php?show_modal=true';
             </script>";
             exit();
         }
