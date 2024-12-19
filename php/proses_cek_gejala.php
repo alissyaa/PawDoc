@@ -30,7 +30,7 @@ function jarak_euclidean($a, $b) {
 }
 
 // Fungsi KNN
-function prediksi_knn($data_latih, $data_uji, $k) {
+function klasifikasi_knn($data_latih, $data_uji, $k) {
     $jarak = [];
     foreach ($data_latih as $latih) {
         $dist = jarak_euclidean($latih['fitur'], $data_uji);
@@ -52,10 +52,10 @@ function prediksi_knn($data_latih, $data_uji, $k) {
     arsort($suara);
 
 
-    $prediksi = array_key_first($suara);
+    $klasifikasi = array_key_first($suara);
 
-    $presisi = ($suara[$prediksi] / $k) * 100;
-    return ['prediksi' => $prediksi, 'presisi' => $presisi];
+    $presisi = ($suara[$klasifikasi] / $k) * 100;
+    return ['klasifikasi' => $klasifikasi, 'presisi' => $presisi];
 }
 
 // Siapkan data latih
@@ -74,9 +74,9 @@ foreach ($gejala as $g) {
     $data_pengguna[$g] = in_array($g, $_POST['gejala']) ? 1 : 0;
 }
 
-// Prediksi penyakit menggunakan KNN
-$result = prediksi_knn($data_latih, $data_pengguna, 3);
-$prediksi = $result['prediksi'];
+// klasifikasi penyakit menggunakan KNN
+$result = klasifikasi_knn($data_latih, $data_pengguna, 23);
+$klasifikasi = $result['klasifikasi'];
 $presisi = $result['presisi'];
 
 $id_konsultasi = $_SESSION['id_konsultasi']; 
@@ -84,7 +84,7 @@ $gejalaJson = json_encode($gejalaInput);
 
 $sql_update = "UPDATE konsultasi SET riwayat_penyakit = ?, gejala = ?, presisi=? WHERE id_konsultasi = ?";
 if ($stmt = $conn->prepare($sql_update)) {
-    $stmt->bind_param("ssii", $prediksi, $gejalaJson, $presisi, $id_konsultasi); 
+    $stmt->bind_param("ssii", $klasifikasi, $gejalaJson, $presisi, $id_konsultasi); 
     if ($stmt->execute()) {
         header("Location: ../hasil.php");
     } else {
