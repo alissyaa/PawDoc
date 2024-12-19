@@ -1,27 +1,30 @@
 body {
     font-family: 'Roboto Mono', monospace;
     margin: 20px;
-    padding: 90px 20px 0 20px;
+    padding: 70px 10px 0 10px;
     flex-direction: column;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    overflow-x: hidden;
 }
 
 header {
     position: fixed;
     top: 0;
-    width: 90%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
-    padding: 0 15px;
+    padding: 0 20px;
+    box-sizing: border-box;
     z-index: 10;
+    overflow-x: hidden;
 }
 
 .logo img {
-    max-height: 50px;
+    max-height: 40px;
     width: auto;
 }
 
@@ -90,4 +93,53 @@ header {
 
 .detail-button:hover {
     opacity: 0.8;
+}
+
+/* Responsive Header */
+@media (max-width: 768px) {
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 10px;
+    }
+
+    .logo img {
+        max-height: 30px;
+    }
+
+    .navigation {
+        gap: 10px; 
+    }
+
+    .navigation a {
+        font-size: 12px; 
+        padding: 2px 8px;
+    }
+}
+
+/* Responsive Cards */
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+        margin: 10px auto;
+        padding: 15px;
+        box-shadow: 5px 5px 0px black;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .detail-button {
+        position: static;
+        margin-top: 10px;
+        transform: none;
+        width: 100%;
+        text-align: center;
+    }
 }
