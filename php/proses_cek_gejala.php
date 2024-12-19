@@ -5,7 +5,6 @@ include('conn.php');
 $gejalaInput = isset($_POST['gejala']) ? $_POST['gejala'] : [];
 
 if (empty($gejalaInput)) {
-    $_SESSION['hasil'] = "Anda Sehat";
     header("Location: ../hasil.php");
     exit();
 }
@@ -20,16 +19,6 @@ while ($baris = $hasil->fetch_assoc()) {
 
 $gejala = array_slice(array_keys($data[0]), 0, -1);
 
-function konversi_gejala($data, $gejala) {
-    foreach ($data as &$baris) {
-        foreach ($gejala as $g) {
-            $baris[$g] = ($baris[$g] === "Yes") ? 1 : 0;
-        }
-    }
-    return $data;
-}
-
-$data_terkonversi = konversi_gejala($data, $gejala);
 
 // Fungsi untuk menghitung jarak Euclidean
 function jarak_euclidean($a, $b) {
@@ -61,12 +50,17 @@ function prediksi_knn($data_latih, $data_uji, $k) {
         $suara[$t['label']] += 1;
     }
     arsort($suara);
-    return array_key_first($suara);
+
+
+    $prediksi = array_key_first($suara);
+
+    $presisi = ($suara[$prediksi] / $k) * 100;
+    return ['prediksi' => $prediksi, 'presisi' => $presisi];
 }
 
 // Siapkan data latih
 $data_latih = [];
-foreach ($data_terkonversi as $baris) {
+foreach ($data as $baris) {
     $fitur = [];
     foreach ($gejala as $g) {
         $fitur[$g] = $baris[$g];
@@ -81,15 +75,16 @@ foreach ($gejala as $g) {
 }
 
 // Prediksi penyakit menggunakan KNN
-$prediksi = prediksi_knn($data_latih, $data_pengguna, 3);
+$result = prediksi_knn($data_latih, $data_pengguna, 3);
+$prediksi = $result['prediksi'];
+$presisi = $result['presisi'];
 
 $id_konsultasi = $_SESSION['id_konsultasi']; 
-
 $gejalaJson = json_encode($gejalaInput);
 
-$sql_update = "UPDATE konsultasi SET riwayat_penyakit = ?, gejala = ? WHERE id_konsultasi = ?";
+$sql_update = "UPDATE konsultasi SET riwayat_penyakit = ?, gejala = ?, presisi=? WHERE id_konsultasi = ?";
 if ($stmt = $conn->prepare($sql_update)) {
-    $stmt->bind_param("ssi", $prediksi, $gejalaJson, $id_konsultasi); 
+    $stmt->bind_param("ssii", $prediksi, $gejalaJson, $presisi, $id_konsultasi); 
     if ($stmt->execute()) {
         header("Location: ../hasil.php");
     } else {
